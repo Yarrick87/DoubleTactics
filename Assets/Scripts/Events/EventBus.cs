@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace DoubleTactics.Events
 {
-
     public enum EventTypes
     {
         Click,
