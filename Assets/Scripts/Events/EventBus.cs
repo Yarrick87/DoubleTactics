@@ -5,7 +5,8 @@ namespace DoubleTactics.Events
 {
     public enum EventTypes
     {
-        Click,
+        InputClick,
+        CardClick,
     }
 
     public static class EventBus

@@ -3,18 +3,18 @@ using UnityEngine;
 
 namespace DoubleTactics.Input
 {
-    public class InputManager : MonoBehaviour, IInputManager
+    public class InputManager : MonoBehaviour
     {
         public void Update()
         {
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
-                var data = new InputClickData()
+                var data = new InputClickEventData()
                 {
                     Position = UnityEngine.Input.mousePosition,
                 };
 
-                EventBus.Invoke(EventTypes.Click, data);
+                EventBus.Invoke(EventTypes.InputClick, data);
             }
         }
     }
