@@ -1,46 +1,50 @@
 using System;
 using System.Collections.Generic;
 
-public enum EventTypes
+namespace DoubleTactics.Events
 {
-    Click,
-}
 
-public static class EventBus
-{
-    private static Dictionary<EventTypes, List<Action>> _subscribers = new ();
-    
-    public static void Subscribe(EventTypes type, Action handler)
+    public enum EventTypes
     {
-        if (!_subscribers.TryGetValue(type, out var actions))
-        {
-            actions = new List<Action>();
-            _subscribers[type] = actions;
-        }
-        
-        actions.Add(handler);
+        Click,
     }
-    
-    public static void Unsubscribe(EventTypes type, Action handler)
+
+    public static class EventBus
     {
-        if (_subscribers.TryGetValue(type, out var actions))
+        private static Dictionary<EventTypes, List<Action<IEventData>>> _subscribers = new();
+
+        public static void Subscribe(EventTypes type, Action<IEventData> handler)
         {
-            actions.Remove(handler);
-    
-            if (actions.Count <= 0)
+            if (!_subscribers.TryGetValue(type, out var actions))
             {
-                _subscribers.Remove(type);
+                actions = new List<Action<IEventData>>();
+                _subscribers[type] = actions;
+            }
+
+            actions.Add(handler);
+        }
+
+        public static void Unsubscribe(EventTypes type, Action<IEventData> handler)
+        {
+            if (_subscribers.TryGetValue(type, out var actions))
+            {
+                actions.Remove(handler);
+
+                if (actions.Count <= 0)
+                {
+                    _subscribers.Remove(type);
+                }
             }
         }
-    }
-    
-    public static void Invoke(EventTypes type)
-    {
-        if (_subscribers.TryGetValue(type, out var actions))
+
+        public static void Invoke(EventTypes type, IEventData data = null)
         {
-            foreach (var action in actions)
+            if (_subscribers.TryGetValue(type, out var actions))
             {
-                action.Invoke();
+                foreach (var action in actions)
+                {
+                    action.Invoke(data);
+                }
             }
         }
     }
