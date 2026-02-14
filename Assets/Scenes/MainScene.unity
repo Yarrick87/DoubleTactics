@@ -225,6 +225,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _boardController: {fileID: 874052568}
+  RemoveCardsDelay: 3
+  HideCardsDelay: 3
 --- !u!4 &175340158
 Transform:
   m_ObjectHideFlags: 0
@@ -238,7 +240,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &176020255
 GameObject:
@@ -375,6 +377,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &634098643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 634098645}
+  - component: {fileID: 634098644}
+  m_Layer: 0
+  m_Name: SettingsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &634098644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634098643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad99fb79453bead4db408c5e37fbc541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardsSettings: {fileID: 11400000, guid: e7c98d1e7fe3af24d999bc9f8bc49e53, type: 2}
+--- !u!4 &634098645
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634098643}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &874052566
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +453,7 @@ Transform:
   m_Children:
   - {fileID: 176020256}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &874052568
 MonoBehaviour:
@@ -425,26 +472,6 @@ MonoBehaviour:
   - {fileID: 2126045084}
   - {fileID: 1199311779}
   - {fileID: 76728650}
-  CardBackSprite: {fileID: 21300000, guid: ffb39b66175f07f4883ce076fc43a800, type: 3}
-  CardFrontSprites:
-  - {fileID: -1123083704, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: -696547875, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: 2013813472, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: 926931871, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: -419665960, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: 701992574, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: 2133195716, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: 489918400, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: -999545582, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: 1882686738, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: -1219400489, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: 52512706, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: 643400529, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: -2030619685, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: -1562343125, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  - {fileID: 1055133545, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
-  RemoveCardsDelay: 1
-  HideCardsDelay: 1
 --- !u!1001 &1199311777
 PrefabInstance:
   m_ObjectHideFlags: 0

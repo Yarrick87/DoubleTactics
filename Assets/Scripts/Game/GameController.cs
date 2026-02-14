@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using DoubleTactics.Events;
 using DoubleTactics.Game.Board;
 using DoubleTactics.Game.Cards;
@@ -13,10 +15,14 @@ namespace DoubleTactics.Game
         [SerializeField]
         private BoardController _boardController;
         
+        public float RemoveCardsDelay = 3f;
+        public float HideCardsDelay = 3f;
+        
         private Camera _mainCamera;
         
         private Card[] _shownCards;
         private int _shownCardsAmount;
+        private bool _areCardsEqual;
 
         private void Start()
         {
@@ -44,8 +50,13 @@ namespace DoubleTactics.Game
             EventBus.Unsubscribe(EventTypes.InputClick, OnInputClick);
         }
 
-        private void UpdateCardsState(Card card)
+        private void UpdateBoardState(Card card)
         {
+            if (_shownCardsAmount >= MAX_SHOWN_CARDS_AMOUNT)
+            {
+                ForceUpdateBoardState();
+            }
+            
             _boardController.ShowCard(card);
 
             _shownCards[_shownCardsAmount] = card;
@@ -53,15 +64,47 @@ namespace DoubleTactics.Game
 
             if (_shownCardsAmount >= MAX_SHOWN_CARDS_AMOUNT)
             {
-                _shownCardsAmount = 0;
                 CompareCards();
             }
         }
 
+        private void ForceUpdateBoardState()
+        {
+            StopAllCoroutines();
+            UpdateCardsState();
+        }
+
+        private void UpdateCardsState()
+        {
+            for (int i = 0; i < _shownCards.Length; i++)
+            {
+                if (_areCardsEqual)
+                {
+                    _boardController.RemoveCard(_shownCards[i]);
+                }
+                else
+                {
+                    _boardController.HideCard(_shownCards[i]);
+                }
+            }
+            
+            _shownCardsAmount = 0;
+            Array.Clear(_shownCards, 0, _shownCards.Length);
+        }
+
         private void CompareCards()
         {
-            var areEqual = _shownCards[0].Id == _shownCards[1].Id;
-            _boardController.UpdateCardsAfterComparison(_shownCards, areEqual);
+            StartCoroutine(CompareCardsCoroutine());
+        }
+        
+        private IEnumerator CompareCardsCoroutine()
+        {
+            _areCardsEqual = _shownCards[0].Id == _shownCards[1].Id;
+            var delay = _areCardsEqual ? HideCardsDelay : RemoveCardsDelay;
+            
+            yield return new WaitForSeconds(delay);
+
+            UpdateCardsState();
         }
         
         private void OnInputClick(IEventData eventData)
@@ -80,7 +123,7 @@ namespace DoubleTactics.Game
                 if (card != null &&
                     !card.IsShown)
                 {
-                    UpdateCardsState(card);
+                    UpdateBoardState(card);
                 }
             }
         }

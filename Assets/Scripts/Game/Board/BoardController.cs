@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using DoubleTactics.Game.Cards;
 using UnityEngine;
@@ -9,14 +8,12 @@ namespace DoubleTactics.Game.Board
     public class BoardController : MonoBehaviour
     {
         public Card[] Cards;
-        public Sprite CardBackSprite;
-        public Sprite[] CardFrontSprites;
 
-        public float RemoveCardsDelay = 1f;
-        public float HideCardsDelay = 1f;
+        private CardsSettings _cardsSettings;
 
         public void CreateBoard()
         {
+            _cardsSettings = SettingsManager.Instance.CardsSettings;
             PopulateBoard();
         }
         
@@ -24,12 +21,15 @@ namespace DoubleTactics.Game.Board
         {
             card.Show();
         }
-        
-        public void UpdateCardsAfterComparison(Card[] cards, bool areEqual)
-        {
-            var delay = areEqual ? HideCardsDelay : RemoveCardsDelay;
 
-            StartCoroutine(ComparisonDelayCoroutine(cards, delay, areEqual));
+        public void HideCard(Card card)
+        {
+            card.Hide();
+        }
+
+        public void RemoveCard(Card card)
+        {
+            DestroyImmediate(card.gameObject);
         }
 
         private void PopulateBoard()
@@ -54,7 +54,7 @@ namespace DoubleTactics.Game.Board
 
             while (cardIdList.Count < Cards.Length)
             {
-                int randomCardId = Random.Range(0, CardFrontSprites.Length);
+                int randomCardId = Random.Range(0, _cardsSettings.FrontSprites.Length);
                 
                 if (usedCardIds.Add(randomCardId))
                 {
@@ -71,28 +71,7 @@ namespace DoubleTactics.Game.Board
             for (int i = 0; i < Cards.Length; i++)
             {
                 var id = ids[i];
-                Cards[i].SetCard(CardBackSprite, CardFrontSprites[id], id);
-            }
-        }
-
-        private IEnumerator ComparisonDelayCoroutine(Card[] cards, float delay, bool areEqual)
-        {
-            yield return new WaitForSeconds(delay);
-            SetCardsAfterComparison(cards, areEqual);
-        }
-
-        private void SetCardsAfterComparison(Card[] cards, bool areEqual)
-        {
-            for (int i = 0; i < cards.Length; i++)
-            {
-                if (areEqual)
-                {
-                    Destroy(cards[i].gameObject);
-                }
-                else
-                {
-                    cards[i].Hide();
-                }
+                Cards[i].SetCard(_cardsSettings.BackSprite, _cardsSettings.FrontSprites[id], id);
             }
         }
     }
