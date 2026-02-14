@@ -1,8 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
-using DoubleTactics.Events;
 using DoubleTactics.Game.Cards;
 using UnityEngine;
-using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 namespace DoubleTactics.Game.Board
 {
@@ -11,31 +11,25 @@ namespace DoubleTactics.Game.Board
         public Card[] Cards;
         public Sprite CardBackSprite;
         public Sprite[] CardFrontSprites;
-        
-        private Camera _mainCamera;
 
-        private void Start()
+        public float RemoveCardsDelay = 1f;
+        public float HideCardsDelay = 1f;
+
+        public void CreateBoard()
         {
-            _mainCamera = Camera.main;
-            
             PopulateBoard();
-
-            SubscribeEvents();
-        }
-
-        private void OnDestroy()
-        {
-            UnsubscribeEvents();
-        }
-
-        private void SubscribeEvents()
-        {
-            EventBus.Subscribe(EventTypes.InputClick, OnClick);
         }
         
-        private void UnsubscribeEvents()
+        public void ShowCard(Card card)
         {
-            EventBus.Unsubscribe(EventTypes.InputClick, OnClick);
+            card.Show();
+        }
+        
+        public void UpdateCardsAfterComparison(Card[] cards, bool areEqual)
+        {
+            var delay = areEqual ? HideCardsDelay : RemoveCardsDelay;
+
+            StartCoroutine(ComparisonDelayCoroutine(cards, delay, areEqual));
         }
 
         private void PopulateBoard()
@@ -81,20 +75,24 @@ namespace DoubleTactics.Game.Board
             }
         }
 
-        private void OnClick(IEventData eventData)
+        private IEnumerator ComparisonDelayCoroutine(Card[] cards, float delay, bool areEqual)
         {
-            if (eventData == null ||
-                eventData.GetType() != typeof(ClickEvent))
+            yield return new WaitForSeconds(delay);
+            SetCardsAfterComparison(cards, areEqual);
+        }
+
+        private void SetCardsAfterComparison(Card[] cards, bool areEqual)
+        {
+            for (int i = 0; i < cards.Length; i++)
             {
-                return;
-            }
-            
-            var data = (InputClickEventData)eventData;
-            
-            var hit = Physics2D.Raycast(_mainCamera.ScreenToWorldPoint(data.Position), Vector2.zero);
-            if (hit.transform != null)
-            {
-                //
+                if (areEqual)
+                {
+                    Destroy(cards[i].gameObject);
+                }
+                else
+                {
+                    cards[i].Hide();
+                }
             }
         }
     }

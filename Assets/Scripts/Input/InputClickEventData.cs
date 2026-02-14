@@ -1,7 +1,15 @@
 using DoubleTactics.Events;
 using UnityEngine;
 
-public class InputClickEventData : IEventData
+namespace DoubleTactics.Input
 {
-    public Vector3 Position;
+    public class InputClickEventData : IEventData
+    {
+        public Vector3 Position { get; private set; }
+
+        public InputClickEventData(Vector3 position)
+        {
+            Position = position;
+        }
+    }
 }

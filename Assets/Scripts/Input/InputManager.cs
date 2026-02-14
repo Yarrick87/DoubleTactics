@@ -9,11 +9,7 @@ namespace DoubleTactics.Input
         {
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
-                var data = new InputClickEventData()
-                {
-                    Position = UnityEngine.Input.mousePosition,
-                };
-
+                var data = new InputClickEventData(UnityEngine.Input.mousePosition);
                 EventBus.Invoke(EventTypes.InputClick, data);
             }
         }
