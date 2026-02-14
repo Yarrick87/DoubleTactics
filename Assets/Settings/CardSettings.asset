@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 208317c075ef56f4b8d85f75784192cc, type: 3}
   m_Name: CardSettings
   m_EditorClassIdentifier: 
+  _cardPrefab: {fileID: 2654548622287035094, guid: dc0bf5936b4d00247b832406c81170f5, type: 3}
   _backSprite: {fileID: 21300000, guid: ffb39b66175f07f4883ce076fc43a800, type: 3}
   _frontSprites:
   - {fileID: -1123083704, guid: e9b2cd0e42aa1c740b1be77ecd611588, type: 3}
