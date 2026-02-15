@@ -15,6 +15,12 @@ namespace DoubleTactics.Game.Board
         private int _cardsAmount;
         private CardsSettings _cardsSettings;
         private Card[] _cards;
+        private CardsGenerator _cardsGenerator;
+
+        private void Awake()
+        {
+            _cardsGenerator = new CardsGenerator();
+        }
 
         public void CreateBoard(int cardsAmount)
         {
@@ -43,56 +49,9 @@ namespace DoubleTactics.Game.Board
         private void CreateCards()
         {
             var cardPrefab = _cardsSettings.CardPrefab;
-            
-            var positions = GetCardPositions(_cardsAmount, _cardsSettings.BackSprite.bounds.size);
-            _cards = new Card[positions.Length];
 
-            for (int i = 0; i < positions.Length; i++)
-            {
-                var card = GameObject.Instantiate(cardPrefab, positions[i], Quaternion.identity, _cardsContainer);
-                _cards[i] = card;
-            }
-        }
-
-        private Vector3[] GetCardPositions(int cardsAmount, Vector3 size)
-        {
-            var rows = 1;
-            var columns = cardsAmount;
-            
-            for (int i = (int)Math.Sqrt(_cardsAmount); i >= 1; i--)
-            {
-                if (_cardsAmount % i == 0)
-                {
-                    rows = i;
-                    columns = _cardsAmount / i;
-                    break;
-                }
-            }
-            
-            var positions = new List<Vector3>();
-            
-            size.x *= 1.5f;
-            size.y *= 1.5f;
-            
-            var initPosition = Vector3.zero;
-            initPosition.x -= (size.x) * (columns - 1) / 2.0f;
-            initPosition.y += (size.y) * (rows - 1) / 2.0f;
-            
-            var nextPosition = Vector3.zero;
-
-            for (int i = 0; i < rows; i++)
-            {
-                nextPosition.y = initPosition.y - (size.y) * i;
-                
-                for (int j = 0; j < columns; j++)
-                {
-                    nextPosition.x = initPosition.x + (size.x) * j;
-
-                    positions.Add(nextPosition);
-                }
-            }
-            
-            return positions.ToArray();
+            _cards = _cardsGenerator.GenerateCards(cardPrefab, _cardsAmount,
+                _cardsSettings.BackSprite.bounds.size, _cardsContainer);
         }
 
         private void PopulateBoard()
