@@ -47,14 +47,14 @@ namespace DoubleTactics.UI.Popups
 
         private void OnStartClick()
         {
-            var pairsAmount = Int32.Parse(_inputField.text);
-            if (!_cardsAmountValidator.IsValid(pairsAmount * 2))
+            var cardsAmount = Int32.Parse(_inputField.text) * 2;
+            if (!_cardsAmountValidator.IsValid(cardsAmount))
             {
                 _errorText.SetActive(true);
                 return;
             }
             
-            var data = new StartGameEventData(4);
+            var data = new StartGameEventData(cardsAmount);
             EventBus.Invoke(EventTypes.StartGame, data);
             DestroyImmediate(this.gameObject);
         }
