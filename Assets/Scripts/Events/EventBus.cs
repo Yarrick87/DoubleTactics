@@ -8,7 +8,12 @@ namespace DoubleTactics.Events
         InputClick,
         StartGame,
         CardsGenerated,
+        BoardPopulated,
         BoardFinished,
+        ShowCard,
+        RemoveCard,
+        HideCard,
+        ProgressLoaded,
     }
 
     public static class EventBus

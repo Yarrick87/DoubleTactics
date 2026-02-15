@@ -1,7 +1,7 @@
 using DoubleTactics.Events;
 using UnityEngine;
 
-namespace DoubleTactics.Board
+namespace DoubleTactics.Cards
 {
     public class CardsGeneratedEventData : IEventData
     {

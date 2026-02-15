@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3884102800f34374791912f08fb064fe, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
+  _defaultCardPairsAmount: 3
   _minCards: 4
-  _maxCards: 20
+  _maxCards: 32
   _scoreValue: 1
   _scoreMultiplier: 2
   _removeCardsDelay: 1

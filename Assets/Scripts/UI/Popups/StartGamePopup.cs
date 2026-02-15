@@ -1,6 +1,7 @@
 using System;
 using DoubleTactics.Events;
 using DoubleTactics.Game;
+using DoubleTactics.Progress;
 using DoubleTactics.Settings;
 using DoubleTactics.Systems;
 using TMPro;
@@ -13,6 +14,9 @@ namespace DoubleTactics.UI.Popups
     {
         [SerializeField]
         private Button _startGameButton;
+        
+        [SerializeField]
+        private Button _loadGameButton;
 
         [SerializeField]
         private TMP_InputField _inputField;
@@ -27,11 +31,14 @@ namespace DoubleTactics.UI.Popups
         private void Start()
         {
             _gameSettings = SettingsManager.Instance.GameSettings;
+            _cardsAmountValidator = new CardsAmountValidator();
+
+            if (ProgressManager.Instance.HasSavedData())
+            {
+                _loadGameButton.gameObject.SetActive(true);
+            }
             
             SetCardPairsAmount();
-            
-            _cardsAmountValidator = new CardsAmountValidator();
-            
             SubscribeEvents();
         }
 
@@ -43,13 +50,19 @@ namespace DoubleTactics.UI.Popups
         private void SubscribeEvents()
         {
             _startGameButton.onClick.AddListener(OnStartClick);
+            _loadGameButton.onClick.AddListener(OnLoadGameClick);
             _inputField.onValueChanged.AddListener(OnInputFieldValueChanged);
+            
+            // EventBus.Subscribe(EventTypes.ProgressLoaded, OnProgressLoaded);
         }
         
         private void UnsubscribeEvents()
         {
             _startGameButton.onClick.RemoveListener(OnStartClick);
+            _loadGameButton.onClick.RemoveListener(OnLoadGameClick);
             _inputField.onValueChanged.RemoveListener(OnInputFieldValueChanged);
+            
+            // EventBus.Unsubscribe(EventTypes.ProgressLoaded, OnProgressLoaded);
         }
 
         private void SetCardPairsAmount()
@@ -64,14 +77,19 @@ namespace DoubleTactics.UI.Popups
 
         private void OnStartClick()
         {
-            var cardsAmount = Int32.Parse(_inputField.text) * 2;
+            var pairsAmount = Int32.Parse(_inputField.text);
+            var cardsAmount = pairsAmount * 2;
+            
             if (!_cardsAmountValidator.IsValid(cardsAmount))
             {
                 _errorText.SetActive(true);
                 return;
             }
 
-            _gameSettings.PreviousCardPairsAmount = cardsAmount / 2;
+            if (_gameSettings.PreviousCardPairsAmount != pairsAmount)
+            {
+                _gameSettings.PreviousCardPairsAmount = pairsAmount;
+            }
             
             var data = new StartGameEventData(cardsAmount);
             EventBus.Invoke(EventTypes.StartGame, data);
@@ -85,5 +103,16 @@ namespace DoubleTactics.UI.Popups
                 _errorText.SetActive(false);
             }
         }
+
+        private void OnLoadGameClick()
+        {
+            ProgressManager.Instance.LoadProgress();
+            DestroyImmediate(this.gameObject);
+        }
+
+        // private void OnProgressLoaded(IEventData eventData)
+        // {
+        //     DestroyImmediate(this.gameObject);
+        // }
     }
 }

@@ -1,4 +1,4 @@
-using DoubleTactics.Board;
+using DoubleTactics.Cards;
 using DoubleTactics.Events;
 using UnityEngine;
 

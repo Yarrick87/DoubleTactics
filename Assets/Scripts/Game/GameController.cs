@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
+using DoubleTactics.Board;
+using DoubleTactics.Cards;
 using DoubleTactics.Events;
 using DoubleTactics.Game.Board;
 using DoubleTactics.Game.Cards;
 using DoubleTactics.Input;
+using DoubleTactics.Progress;
 using DoubleTactics.Settings;
 using DoubleTactics.UI.Popups;
 using UnityEngine;
@@ -46,15 +49,19 @@ namespace DoubleTactics.Game
         private void SubscribeEvents()
         {
             EventBus.Subscribe(EventTypes.StartGame, OnStartGame);
+            EventBus.Subscribe(EventTypes.ProgressLoaded, OnProgressLoaded);
             EventBus.Subscribe(EventTypes.InputClick, OnInputClick);
             EventBus.Subscribe(EventTypes.BoardFinished, OnBoardFinished);
+            EventBus.Subscribe(EventTypes.BoardPopulated, OnBoardPopulated);
         }
         
         private void UnsubscribeEvents()
         {
             EventBus.Unsubscribe(EventTypes.StartGame, OnStartGame);
+            EventBus.Unsubscribe(EventTypes.ProgressLoaded, OnProgressLoaded);
             EventBus.Unsubscribe(EventTypes.InputClick, OnInputClick);
             EventBus.Unsubscribe(EventTypes.BoardFinished, OnBoardFinished);
+            EventBus.Unsubscribe(EventTypes.BoardPopulated, OnBoardPopulated);
         }
 
         private void UpdateBoardState(Card card)
@@ -85,12 +92,16 @@ namespace DoubleTactics.Game
         {
             for (int i = 0; i < _shownCards.Length; i++)
             {
+                var data = new CardsManipulationEventData(_shownCards[i].Id);
+                
                 if (_areCardsEqual)
                 {
+                    EventBus.Invoke(EventTypes.RemoveCard, data);
                     _boardController.RemoveCard(_shownCards[i]);
                 }
                 else
                 {
+                    EventBus.Invoke(EventTypes.HideCard, data);
                     _boardController.HideCard(_shownCards[i]);
                 }
             }
@@ -127,6 +138,20 @@ namespace DoubleTactics.Game
             var data = (StartGameEventData)eventData;
             _boardController.CreateBoard(data.CardsAmount);
         }
+
+        private void OnProgressLoaded(IEventData eventData)
+        {
+            _shownCards = new Card[MAX_SHOWN_CARDS_AMOUNT];
+            
+            if (eventData?.GetType() != typeof(ProgressLoadedDataEvent))
+            {
+                Debug.LogError("Invalid progress loaded event data");
+                return;
+            }
+            
+            var data = (ProgressLoadedDataEvent)eventData;
+            _boardController.CreateBoard(data.GameProgressData.CardsData);
+        }
         
         private void OnInputClick(IEventData eventData)
         {
@@ -145,6 +170,9 @@ namespace DoubleTactics.Game
                 if (card != null &&
                     !card.IsShown)
                 {
+                    var data = new CardsManipulationEventData(card.Id, card.transform.position);
+                    EventBus.Invoke(EventTypes.ShowCard, data);
+                    
                     UpdateBoardState(card);
                 }
             }
@@ -153,6 +181,27 @@ namespace DoubleTactics.Game
         private void OnBoardFinished(IEventData eventData)
         {
             PopupManager.Instance.ShowPopup(PopupTypes.StartGame);
+        }
+
+        private void OnBoardPopulated(IEventData eventData)
+        {
+            if (eventData?.GetType() != typeof(BoardPopulatedEventData))
+            {
+                Debug.LogError("Invalid board populated event data");
+                return;
+            }
+
+            var data = (BoardPopulatedEventData)eventData;
+            var cards = data.Cards;
+
+            for (int i = 0; i < cards.Length; i++)
+            {
+                if (cards[i].IsShown)
+                {
+                    _shownCards[_shownCardsAmount] = cards[i];
+                    _shownCardsAmount++;
+                }
+            }
         }
     }
 }
