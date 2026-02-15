@@ -46,6 +46,12 @@ namespace DoubleTactics.Game.Board
         public void RemoveCard(Card card)
         {
             DestroyImmediate(card.gameObject);
+            _cardsAmount--;
+
+            if (_cardsAmount <= 0)
+            {
+                EventBus.Invoke(EventTypes.BoardFinished);
+            }
         }
 
         private void CreateCards()

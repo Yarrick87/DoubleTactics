@@ -47,12 +47,14 @@ namespace DoubleTactics.Game
         {
             EventBus.Subscribe(EventTypes.StartGame, OnStartGame);
             EventBus.Subscribe(EventTypes.InputClick, OnInputClick);
+            EventBus.Subscribe(EventTypes.BoardFinished, OnBoardFinished);
         }
         
         private void UnsubscribeEvents()
         {
             EventBus.Unsubscribe(EventTypes.StartGame, OnStartGame);
             EventBus.Unsubscribe(EventTypes.InputClick, OnInputClick);
+            EventBus.Unsubscribe(EventTypes.BoardFinished, OnBoardFinished);
         }
 
         private void UpdateBoardState(Card card)
@@ -146,6 +148,11 @@ namespace DoubleTactics.Game
                     UpdateBoardState(card);
                 }
             }
+        }
+
+        private void OnBoardFinished(IEventData eventData)
+        {
+            PopupManager.Instance.ShowPopup(PopupTypes.StartGame);
         }
     }
 }
