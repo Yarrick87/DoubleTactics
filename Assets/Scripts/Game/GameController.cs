@@ -4,6 +4,7 @@ using DoubleTactics.Events;
 using DoubleTactics.Game.Board;
 using DoubleTactics.Game.Cards;
 using DoubleTactics.Input;
+using DoubleTactics.Settings;
 using DoubleTactics.UI.Popups;
 using UnityEngine;
 
@@ -16,14 +17,12 @@ namespace DoubleTactics.Game
         [SerializeField]
         private BoardController _boardController;
         
-        public float RemoveCardsDelay = 3f;
-        public float HideCardsDelay = 3f;
-        
         private Camera _mainCamera;
         
         private Card[] _shownCards;
         private int _shownCardsAmount;
         private bool _areCardsEqual;
+        private GameSettings _settings;
 
         private void Awake()
         {
@@ -32,6 +31,8 @@ namespace DoubleTactics.Game
         
         private void Start()
         {
+            _settings = SettingsManager.Instance.GameSettings;
+            
             SubscribeEvents();
             
             PopupManager.Instance.ShowPopup(PopupTypes.StartGame);
@@ -104,7 +105,7 @@ namespace DoubleTactics.Game
         private IEnumerator CompareCardsCoroutine()
         {
             _areCardsEqual = _shownCards[0].Id == _shownCards[1].Id;
-            var delay = _areCardsEqual ? HideCardsDelay : RemoveCardsDelay;
+            var delay = _areCardsEqual ? _settings.RemoveCardsDelay : _settings.HideCardsDelay;
             
             yield return new WaitForSeconds(delay);
 
