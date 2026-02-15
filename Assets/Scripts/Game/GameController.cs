@@ -118,7 +118,7 @@ namespace DoubleTactics.Game
             
             if (eventData?.GetType() != typeof(StartGameEventData))
             {
-                Debug.LogError("Invalid start game vent data");
+                Debug.LogError("Invalid start game event data");
                 return;
             }
             
@@ -130,7 +130,7 @@ namespace DoubleTactics.Game
         {
             if (eventData?.GetType() != typeof(InputClickEventData))
             {
-                Debug.LogError("Invalid input click vent data");
+                Debug.LogError("Invalid input click event data");
                 return;
             }
             

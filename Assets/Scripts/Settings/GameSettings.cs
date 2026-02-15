@@ -4,6 +4,9 @@ using UnityEngine;
 public class GameSettings : ScriptableObject
 {
     [SerializeField]
+    private int _defaultCardPairsAmount = 3;
+    
+    [SerializeField]
     private int _minCards = 4;
 
     [SerializeField]
@@ -21,6 +24,7 @@ public class GameSettings : ScriptableObject
     [SerializeField]
     private float _hideCardsDelay = 1f;
 
+    public int DefaultCardPairsAmount => _defaultCardPairsAmount;
     public int MinCards => _minCards;
     public int MaxCards => _maxCards;
 

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using DoubleTactics.Board;
+using DoubleTactics.Events;
 using DoubleTactics.Game.Cards;
 using DoubleTactics.Settings;
 using UnityEngine;
@@ -49,9 +51,14 @@ namespace DoubleTactics.Game.Board
         private void CreateCards()
         {
             var cardPrefab = _cardsSettings.CardPrefab;
-
-            _cards = _cardsGenerator.GenerateCards(cardPrefab, _cardsAmount,
-                _cardsSettings.BackSprite.bounds.size, _cardsContainer);
+            var size = _cardsSettings.BackSprite.bounds.size;
+            
+            _cards = _cardsGenerator.GenerateCards(cardPrefab, _cardsAmount, size,
+                _cardsSettings.OffsetFactor, _cardsContainer);
+            
+            var data = new CardsGeneratedEventData(_cards[0].transform.position, 
+                _cards[^1].transform.position, size);
+            EventBus.Invoke(EventTypes.CardsGenerated, data);
         }
 
         private void PopulateBoard()

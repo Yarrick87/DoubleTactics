@@ -1,6 +1,7 @@
 using System;
 using DoubleTactics.Events;
 using DoubleTactics.Game;
+using DoubleTactics.Settings;
 using DoubleTactics.Systems;
 using TMPro;
 using UnityEngine;
@@ -19,10 +20,14 @@ namespace DoubleTactics.UI.Popups
         [SerializeField]
         private GameObject _errorText;
         
+        private int _defaultCardPairsAmount;
         private CardsAmountValidator _cardsAmountValidator;
 
         private void Start()
         {
+            _defaultCardPairsAmount = SettingsManager.Instance.GameSettings.DefaultCardPairsAmount;
+            _inputField.text = _defaultCardPairsAmount.ToString();
+            
             _cardsAmountValidator = new CardsAmountValidator();
             
             SubscribeEvents();

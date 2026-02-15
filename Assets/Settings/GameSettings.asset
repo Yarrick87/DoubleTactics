@@ -16,3 +16,5 @@ MonoBehaviour:
   _maxCards: 20
   _scoreValue: 1
   _scoreMultiplier: 2
+  _removeCardsDelay: 1
+  _hideCardsDelay: 1

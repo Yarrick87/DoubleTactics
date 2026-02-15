@@ -6,11 +6,9 @@ namespace DoubleTactics.Game.Cards
 {
     public class CardsGenerator
     {
-        private const float OFFSET_FACTOR = 1.5f;
-
-        public Card[] GenerateCards(Card prefab, int cardsAmount, Vector3 size, Transform parent)
+        public Card[] GenerateCards(Card prefab, int cardsAmount, Vector3 size, float offsetFactor, Transform parent)
         {
-            var positions = GetCardPositions(cardsAmount, size);
+            var positions = GetCardPositions(cardsAmount, size, offsetFactor);
             
             var cards = new Card[positions.Length];
 
@@ -23,7 +21,7 @@ namespace DoubleTactics.Game.Cards
             return cards;
         }
         
-        private Vector3[] GetCardPositions(int cardsAmount, Vector3 size)
+        private Vector3[] GetCardPositions(int cardsAmount, Vector3 size, float offsetFactor)
         {
             var rows = 1;
             var columns = cardsAmount;
@@ -40,8 +38,8 @@ namespace DoubleTactics.Game.Cards
             
             var positions = new List<Vector3>();
             
-            size.x *= OFFSET_FACTOR;
-            size.y *= OFFSET_FACTOR;
+            size.x *= offsetFactor;
+            size.y *= offsetFactor;
             
             var initPosition = Vector3.zero;
             initPosition.x -= (size.x) * (columns - 1) / 2.0f;
