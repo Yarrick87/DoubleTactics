@@ -32,4 +32,6 @@ public class GameSettings : ScriptableObject
     public int ScoreMultiplier => _scoreMultiplier;
     public float RemoveCardsDelay => _removeCardsDelay;
     public float HideCardsDelay => _hideCardsDelay;
+
+    public int PreviousCardPairsAmount { get; set; }
 }

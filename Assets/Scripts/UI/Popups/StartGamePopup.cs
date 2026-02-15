@@ -22,11 +22,13 @@ namespace DoubleTactics.UI.Popups
         
         private int _defaultCardPairsAmount;
         private CardsAmountValidator _cardsAmountValidator;
+        private GameSettings _gameSettings;
 
         private void Start()
         {
-            _defaultCardPairsAmount = SettingsManager.Instance.GameSettings.DefaultCardPairsAmount;
-            _inputField.text = _defaultCardPairsAmount.ToString();
+            _gameSettings = SettingsManager.Instance.GameSettings;
+            
+            SetCardPairsAmount();
             
             _cardsAmountValidator = new CardsAmountValidator();
             
@@ -50,6 +52,16 @@ namespace DoubleTactics.UI.Popups
             _inputField.onValueChanged.RemoveListener(OnInputFieldValueChanged);
         }
 
+        private void SetCardPairsAmount()
+        {
+            var amount = _gameSettings.PreviousCardPairsAmount > 0
+                ? _gameSettings.PreviousCardPairsAmount
+                : _gameSettings.DefaultCardPairsAmount;
+            
+            _defaultCardPairsAmount = amount;
+            _inputField.text = _defaultCardPairsAmount.ToString();
+        }
+
         private void OnStartClick()
         {
             var cardsAmount = Int32.Parse(_inputField.text) * 2;
@@ -58,6 +70,8 @@ namespace DoubleTactics.UI.Popups
                 _errorText.SetActive(true);
                 return;
             }
+
+            _gameSettings.PreviousCardPairsAmount = cardsAmount / 2;
             
             var data = new StartGameEventData(cardsAmount);
             EventBus.Invoke(EventTypes.StartGame, data);
