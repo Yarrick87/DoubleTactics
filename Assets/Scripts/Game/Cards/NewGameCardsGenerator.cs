@@ -67,7 +67,7 @@ namespace DoubleTactics.Game.Cards
             
             var initPosition = Vector3.zero;
             initPosition.x -= (size.x) * (columns - 1) / 2.0f;
-            initPosition.y += (size.y) * (rows - 1) / 2.0f;
+            initPosition.y += (size.y) * (rows - 1) / 2.0f - ((size.y) / 2.0f);
             
             var nextPosition = Vector3.zero;
 

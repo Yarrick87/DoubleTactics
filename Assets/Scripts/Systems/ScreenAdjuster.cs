@@ -32,22 +32,11 @@ namespace DoubleTactics.Systems
         {
             EventBus.Unsubscribe(EventTypes.CardsGenerated, OnCardsGenerated);
         }
-
-        private void OnCardsGenerated(IEventData eventData)
-        {
-            if (eventData?.GetType() != typeof(CardsGeneratedEventData))
-            {
-                Debug.LogError("Invalid cards generated event data");
-                return;
-            }
-            
-            AdjustScreenSettings((CardsGeneratedEventData)eventData);
-        }
-
+        
         private void AdjustScreenSettings(CardsGeneratedEventData data)
         {
             var horizontalCardsSize = data.RightBottomPosition.x - data.LeftTopPosition.x + data.Size.x;
-            var verticalCardsSize = data.LeftTopPosition.y - data.RightBottomPosition.y + data.Size.y;
+            var verticalCardsSize = data.LeftTopPosition.y - data.RightBottomPosition.y + (data.Size.y * 3);
 
             var vericalScreenSize = _mainCamera.orthographicSize * 2.0f;
             var horizontalScreenSize = vericalScreenSize * Screen.width / Screen.height;
@@ -67,6 +56,17 @@ namespace DoubleTactics.Systems
                     _mainCamera.orthographicSize = (horizontalCardsSize * Screen.height) / (Screen.width * 2.0f);
                 }
             }
+        }
+
+        private void OnCardsGenerated(IEventData eventData)
+        {
+            if (eventData?.GetType() != typeof(CardsGeneratedEventData))
+            {
+                Debug.LogError("Invalid cards generated event data");
+                return;
+            }
+            
+            AdjustScreenSettings((CardsGeneratedEventData)eventData);
         }
     }
 }

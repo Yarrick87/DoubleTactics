@@ -52,8 +52,6 @@ namespace DoubleTactics.UI.Popups
             _startGameButton.onClick.AddListener(OnStartClick);
             _loadGameButton.onClick.AddListener(OnLoadGameClick);
             _inputField.onValueChanged.AddListener(OnInputFieldValueChanged);
-            
-            // EventBus.Subscribe(EventTypes.ProgressLoaded, OnProgressLoaded);
         }
         
         private void UnsubscribeEvents()
@@ -61,8 +59,6 @@ namespace DoubleTactics.UI.Popups
             _startGameButton.onClick.RemoveListener(OnStartClick);
             _loadGameButton.onClick.RemoveListener(OnLoadGameClick);
             _inputField.onValueChanged.RemoveListener(OnInputFieldValueChanged);
-            
-            // EventBus.Unsubscribe(EventTypes.ProgressLoaded, OnProgressLoaded);
         }
 
         private void SetCardPairsAmount()
@@ -109,10 +105,5 @@ namespace DoubleTactics.UI.Popups
             ProgressManager.Instance.LoadProgress();
             DestroyImmediate(this.gameObject);
         }
-
-        // private void OnProgressLoaded(IEventData eventData)
-        // {
-        //     DestroyImmediate(this.gameObject);
-        // }
     }
 }

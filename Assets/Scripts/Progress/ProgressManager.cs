@@ -3,6 +3,7 @@ using DoubleTactics.Board;
 using DoubleTactics.Cards;
 using DoubleTactics.Events;
 using DoubleTactics.Game.Cards;
+using DoubleTactics.Score;
 using DoubleTactics.Systems;
 using UnityEngine;
 using EventBus = DoubleTactics.Events.EventBus;
@@ -14,6 +15,12 @@ namespace DoubleTactics.Progress
         private const string PROGRESS_KEY = "GameProgressData";
         
         private List<CardProgressData> _cardProgressDataList;
+        private int _currentScore;
+        private bool _isConsecutive;
+        private bool _wasLoaded;
+        
+        private Vector3 _initLeftTopPos;
+        private Vector3 _initRightBottomPos;
         
         private void Start()
         {
@@ -34,6 +41,8 @@ namespace DoubleTactics.Progress
 
         public void LoadProgress()
         {
+            _wasLoaded = true;
+            
             var savedDataString =  PlayerPrefs.GetString(PROGRESS_KEY);
             
             var progressData = JsonUtility.FromJson<GameProgressData>(savedDataString);
@@ -49,6 +58,7 @@ namespace DoubleTactics.Progress
             EventBus.Subscribe(EventTypes.HideCard, OnHideCard);
             EventBus.Subscribe(EventTypes.RemoveCard, OnRemoveCard);
             EventBus.Subscribe(EventTypes.BoardFinished, OnBoardFinished);
+            EventBus.Subscribe(EventTypes.ChangeScore, OnChangeScore);
         }
 
         private void UnsubscribeEvents()
@@ -58,6 +68,7 @@ namespace DoubleTactics.Progress
             EventBus.Unsubscribe(EventTypes.HideCard, OnHideCard);
             EventBus.Unsubscribe(EventTypes.RemoveCard, OnRemoveCard);
             EventBus.Unsubscribe(EventTypes.BoardFinished, OnBoardFinished);
+            EventBus.Unsubscribe(EventTypes.ChangeScore, OnChangeScore);
         }
 
         private void OnBoardPopulated(IEventData eventData)
@@ -67,9 +78,15 @@ namespace DoubleTactics.Progress
                 Debug.LogError("Invalid board populated event data");
                 return;
             }
-
+            
             var data = (BoardPopulatedEventData)eventData;
             CreateCardsProgressData(data.Cards);
+
+            if (!_wasLoaded)
+            {
+                _initLeftTopPos = _cardProgressDataList[0].Position;
+                _initRightBottomPos = _cardProgressDataList[^1].Position;
+            }
         }
 
         private void CreateCardsProgressData(Card[] cards)
@@ -100,6 +117,10 @@ namespace DoubleTactics.Progress
             var gameProgressData = new GameProgressData()
             {
                 CardsData = _cardProgressDataList.ToArray(),
+                CurrentScore = _currentScore,
+                IsConsecutive = _isConsecutive,
+                InitLeftTopPos = _initLeftTopPos,
+                InitRightBottomPos = _initRightBottomPos,
             };
 
             var data = JsonUtility.ToJson(gameProgressData);
@@ -163,9 +184,23 @@ namespace DoubleTactics.Progress
         private void OnBoardFinished(IEventData eventData)
         {
             _cardProgressDataList = null;
+            _wasLoaded = false;
             
             PlayerPrefs.DeleteKey(PROGRESS_KEY);
             PlayerPrefs.Save();
+        }
+        
+        private void OnChangeScore(IEventData eventData)
+        {
+            if (eventData?.GetType() != typeof(ChangeScoreEventData))
+            {
+                Debug.LogError("Invalid change score event data");
+                return;
+            }
+            
+            var data = (ChangeScoreEventData)eventData;
+            _currentScore = data.Score;
+            _isConsecutive = data.IsConsecutive;
         }
     }
 }

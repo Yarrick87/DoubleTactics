@@ -14,6 +14,8 @@ namespace DoubleTactics.Events
         RemoveCard,
         HideCard,
         ProgressLoaded,
+        CardsCompared,
+        ChangeScore,
     }
 
     public static class EventBus

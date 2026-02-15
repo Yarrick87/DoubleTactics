@@ -26,6 +26,7 @@ namespace DoubleTactics.Game
         private int _shownCardsAmount;
         private bool _areCardsEqual;
         private GameSettings _settings;
+        private bool _isConsecutiveGuess;
 
         private void Awake()
         {
@@ -105,6 +106,14 @@ namespace DoubleTactics.Game
                     _boardController.HideCard(_shownCards[i]);
                 }
             }
+
+            if (_areCardsEqual)
+            {
+                var comparisonData = new ComparisonEventData(_isConsecutiveGuess);
+                EventBus.Invoke(EventTypes.CardsCompared, comparisonData);
+            }
+
+            _isConsecutiveGuess = _areCardsEqual;
             
             _shownCardsAmount = 0;
             Array.Clear(_shownCards, 0, _shownCards.Length);
@@ -128,6 +137,7 @@ namespace DoubleTactics.Game
         private void OnStartGame(IEventData eventData)
         {
             _shownCards = new Card[MAX_SHOWN_CARDS_AMOUNT];
+            _isConsecutiveGuess = false;
             
             if (eventData?.GetType() != typeof(StartGameEventData))
             {
@@ -150,7 +160,8 @@ namespace DoubleTactics.Game
             }
             
             var data = (ProgressLoadedDataEvent)eventData;
-            _boardController.CreateBoard(data.GameProgressData.CardsData);
+            _isConsecutiveGuess = data.GameProgressData.IsConsecutive;
+            _boardController.CreateBoard(data);
         }
         
         private void OnInputClick(IEventData eventData)

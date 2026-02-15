@@ -10,11 +10,8 @@ namespace DoubleTactics.Game.Cards
         private Sprite _backSprite;
         private Sprite _frontSprite;
         
-        // public int Id { get; private set; }
-        // public bool IsShown { get; private set; }
-
-        public int Id;
-        public bool IsShown;
+        public int Id { get; private set; }
+        public bool IsShown { get; private set; }
 
         public void SetCard(Sprite backSprite, Sprite frontSprite, int id)
         {
