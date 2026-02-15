@@ -8,6 +8,7 @@ using DoubleTactics.Game.Cards;
 using DoubleTactics.Input;
 using DoubleTactics.Progress;
 using DoubleTactics.Settings;
+using DoubleTactics.Sound;
 using DoubleTactics.UI.Popups;
 using UnityEngine;
 
@@ -81,6 +82,10 @@ namespace DoubleTactics.Game
             {
                 CompareCards();
             }
+            else
+            {
+                SoundManager.Instance.PlaySound(SoundTypes.Click);
+            }
         }
 
         private void ForceUpdateBoardState()
@@ -128,6 +133,9 @@ namespace DoubleTactics.Game
         {
             _areCardsEqual = _shownCards[0].Id == _shownCards[1].Id;
             var delay = _areCardsEqual ? _settings.RemoveCardsDelay : _settings.HideCardsDelay;
+            
+            var soundType = _areCardsEqual ? SoundTypes.Match : SoundTypes.Mismatch;
+            SoundManager.Instance.PlaySound(soundType);
             
             yield return new WaitForSeconds(delay);
 

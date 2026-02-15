@@ -4,6 +4,7 @@ using DoubleTactics.Events;
 using DoubleTactics.Game.Cards;
 using DoubleTactics.Progress;
 using DoubleTactics.Settings;
+using DoubleTactics.Sound;
 using UnityEngine;
 
 namespace DoubleTactics.Game.Board
@@ -87,6 +88,7 @@ namespace DoubleTactics.Game.Board
         {
             card.OnCardRemoved.RemoveListener(OnLastCardRemoved);
             Destroy(card.gameObject);
+            SoundManager.Instance.PlaySound(SoundTypes.Finish);
             EventBus.Invoke(EventTypes.BoardFinished);
         }
     }
