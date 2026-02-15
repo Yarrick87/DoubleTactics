@@ -57,13 +57,14 @@ namespace DoubleTactics.Game.Board
 
         public void RemoveCard(Card card)
         {
-            DestroyImmediate(card.gameObject);
             _cardsAmount--;
 
             if (_cardsAmount <= 0)
             {
-                EventBus.Invoke(EventTypes.BoardFinished);
+                card.OnCardRemoved.AddListener(OnLastCardRemoved);
             }
+            
+            card.Remove();
         }
 
         private void PopulateBoard(int cardsAmount, Sprite backSprite, Sprite[] frontSprites,
@@ -80,6 +81,13 @@ namespace DoubleTactics.Game.Board
             
             var boardPopulatedData = new BoardPopulatedEventData(_cards);
             EventBus.Invoke(EventTypes.BoardPopulated, boardPopulatedData);
+        }
+
+        private void OnLastCardRemoved(Card card)
+        {
+            card.OnCardRemoved.RemoveListener(OnLastCardRemoved);
+            Destroy(card.gameObject);
+            EventBus.Invoke(EventTypes.BoardFinished);
         }
     }
 }

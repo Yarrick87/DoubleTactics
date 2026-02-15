@@ -1,11 +1,21 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DoubleTactics.Game.Cards
 {
     public class Card : MonoBehaviour
     {
+        private const string ROTATE_TO_FRONT_ANIMATION_NAME = "RotateToFront";
+        private const string ROTATE_TO_BACK_ANIMATION_NAME = "RotateToBack";
+        private const string REMOVE_ANIMATION_NAME = "Remove";
+        
         [SerializeField]
         private SpriteRenderer _spriteRenderer;
+
+        [SerializeField]
+        private Animation _animation;
+        
+        public UnityEvent<Card> OnCardRemoved;
         
         private Sprite _backSprite;
         private Sprite _frontSprite;
@@ -26,13 +36,36 @@ namespace DoubleTactics.Game.Cards
         public void Show()
         {
             IsShown = true;
-            _spriteRenderer.sprite = _frontSprite;
+            _animation.Play(ROTATE_TO_FRONT_ANIMATION_NAME);
         }
         
         public void Hide()
         {
             IsShown = false;
+            _animation.Play(ROTATE_TO_BACK_ANIMATION_NAME);
+        }
+
+        public void Remove()
+        {
+            _animation.Play(REMOVE_ANIMATION_NAME);
+        }
+
+        // call from animation
+        public void OnRotateToFrontMiddle()
+        {
+            _spriteRenderer.sprite = _frontSprite;
+        }
+        
+        // call from animation
+        public void OnRotateToBackMiddle()
+        {
             _spriteRenderer.sprite = _backSprite;
+        }
+        
+        // call from animation
+        public void OnScaledToZero()
+        {
+            OnCardRemoved?.Invoke(this);
         }
     }
 }

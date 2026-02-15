@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2654548622287035113}
   - component: {fileID: 2654548622287035112}
   - component: {fileID: 2654548622287035095}
+  - component: {fileID: 4504964907116381905}
   - component: {fileID: 2654548622287035094}
   m_Layer: 0
   m_Name: Card
@@ -112,6 +113,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.26, y: 2.26}
   m_EdgeRadius: 0
+--- !u!111 &4504964907116381905
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2654548622287035115}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: ce534895040cb7a43a6785159166f315, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: ce534895040cb7a43a6785159166f315, type: 2}
+  - {fileID: 7400000, guid: 693957f81c21a6f4ebc3a522f262f595, type: 2}
+  - {fileID: 7400000, guid: fdb21ead96606bb4393a81ad0435181a, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &2654548622287035094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,3 +144,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 2654548622287035112}
+  _animation: {fileID: 4504964907116381905}

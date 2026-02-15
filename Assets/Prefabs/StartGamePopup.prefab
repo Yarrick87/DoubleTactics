@@ -1250,7 +1250,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Choose card pairs amount
 
-    (min 2, max 10)'
+    (min 2, max 16)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
