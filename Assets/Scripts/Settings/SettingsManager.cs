@@ -1,23 +1,17 @@
+using DoubleTactics.Systems;
 using UnityEngine;
 
-public class SettingsManager : MonoBehaviour
+namespace DoubleTactics.Settings
 {
-    [SerializeField]
-    private CardsSettings _cardsSettings;
-    
-    public CardsSettings CardsSettings => _cardsSettings;
-    
-    public static SettingsManager Instance { get; private set; }
-
-    private void Awake()
+    public class SettingsManager : SingletonMonoBehaviour<SettingsManager>
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            DestroyImmediate(gameObject);
-        }
+        [SerializeField]
+        private CardsSettings _cardsSettings;
+        
+        [SerializeField]
+        private GameSettings _gameSettings;
+
+        public CardsSettings CardsSettings => _cardsSettings;
+        public GameSettings GameSettings => _gameSettings;
     }
 }

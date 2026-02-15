@@ -4,6 +4,7 @@ using DoubleTactics.Events;
 using DoubleTactics.Game.Board;
 using DoubleTactics.Game.Cards;
 using DoubleTactics.Input;
+using DoubleTactics.UI.Popups;
 using UnityEngine;
 
 namespace DoubleTactics.Game
@@ -24,15 +25,16 @@ namespace DoubleTactics.Game
         private int _shownCardsAmount;
         private bool _areCardsEqual;
 
-        private void Start()
+        private void Awake()
         {
             _mainCamera = Camera.main;
-
-            _shownCards = new Card[MAX_SHOWN_CARDS_AMOUNT];
-            
-            _boardController.CreateBoard();
-            
+        }
+        
+        private void Start()
+        {
             SubscribeEvents();
+            
+            PopupManager.Instance.ShowPopup(PopupTypes.StartGame);
         }
 
         private void OnDestroy()
@@ -42,11 +44,13 @@ namespace DoubleTactics.Game
 
         private void SubscribeEvents()
         {
+            EventBus.Subscribe(EventTypes.StartGame, OnStartGame);
             EventBus.Subscribe(EventTypes.InputClick, OnInputClick);
         }
         
         private void UnsubscribeEvents()
         {
+            EventBus.Unsubscribe(EventTypes.StartGame, OnStartGame);
             EventBus.Unsubscribe(EventTypes.InputClick, OnInputClick);
         }
 
@@ -106,11 +110,26 @@ namespace DoubleTactics.Game
 
             UpdateCardsState();
         }
+
+        private void OnStartGame(IEventData eventData)
+        {
+            _shownCards = new Card[MAX_SHOWN_CARDS_AMOUNT];
+            
+            if (eventData?.GetType() != typeof(StartGameEventData))
+            {
+                Debug.LogError("Invalid start game vent data");
+                return;
+            }
+            
+            var data = (StartGameEventData)eventData;
+            _boardController.CreateBoard(data.CardsAmount);
+        }
         
         private void OnInputClick(IEventData eventData)
         {
             if (eventData?.GetType() != typeof(InputClickEventData))
             {
+                Debug.LogError("Invalid input click vent data");
                 return;
             }
             

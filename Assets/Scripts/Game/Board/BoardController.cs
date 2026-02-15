@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DoubleTactics.Game.Cards;
+using DoubleTactics.Settings;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,16 +9,16 @@ namespace DoubleTactics.Game.Board
 {
     public class BoardController : MonoBehaviour
     {
-        public int cardsNumber = 4;
-
         [SerializeField]
         private Transform _cardsContainer;
 
+        private int _cardsAmount;
         private CardsSettings _cardsSettings;
         private Card[] _cards;
 
-        public void CreateBoard()
+        public void CreateBoard(int cardsAmount)
         {
+            _cardsAmount = cardsAmount;
             _cardsSettings = SettingsManager.Instance.CardsSettings;
             
             CreateCards();
@@ -43,7 +44,7 @@ namespace DoubleTactics.Game.Board
         {
             var cardPrefab = _cardsSettings.CardPrefab;
             
-            var positions = GetCardPositions(cardsNumber, _cardsSettings.BackSprite.bounds.size);
+            var positions = GetCardPositions(_cardsAmount, _cardsSettings.BackSprite.bounds.size);
             _cards = new Card[positions.Length];
 
             for (int i = 0; i < positions.Length; i++)
@@ -58,12 +59,12 @@ namespace DoubleTactics.Game.Board
             var rows = 1;
             var columns = cardsAmount;
             
-            for (int i = (int)Math.Sqrt(cardsNumber); i >= 1; i--)
+            for (int i = (int)Math.Sqrt(_cardsAmount); i >= 1; i--)
             {
-                if (cardsNumber % i == 0)
+                if (_cardsAmount % i == 0)
                 {
                     rows = i;
-                    columns = cardsNumber / i;
+                    columns = _cardsAmount / i;
                     break;
                 }
             }

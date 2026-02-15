@@ -1,7 +1,7 @@
 using DoubleTactics.Game.Cards;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CardSettings", menuName = "CardSettings")]
+[CreateAssetMenu(fileName = "CardSettings", menuName = "DoubleTacticsSettings/CardSettings")]
 public class CardsSettings : ScriptableObject
 {
     [SerializeField]
