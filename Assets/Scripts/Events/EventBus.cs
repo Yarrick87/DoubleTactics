@@ -16,6 +16,7 @@ namespace DoubleTactics.Events
         ProgressLoaded,
         CardsCompared,
         ChangeScore,
+        ExitGame,
     }
 
     public static class EventBus

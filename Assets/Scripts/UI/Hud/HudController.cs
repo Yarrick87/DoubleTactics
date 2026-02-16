@@ -2,6 +2,7 @@ using DoubleTactics.Events;
 using DoubleTactics.Score;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DoubleTactics.UI.Hud
 {
@@ -12,6 +13,9 @@ namespace DoubleTactics.UI.Hud
 
         [SerializeField]
         private TMP_Text _scoreValueText;
+        
+        [SerializeField]
+        private Button _exitGameButton;
 
         private void Start()
         {
@@ -28,6 +32,7 @@ namespace DoubleTactics.UI.Hud
             EventBus.Subscribe(EventTypes.BoardPopulated, OnBoardPopulated);
             EventBus.Subscribe(EventTypes.ChangeScore, OnChangeScore);
             EventBus.Subscribe(EventTypes.BoardFinished, OnBoardFinished);
+            _exitGameButton.onClick.AddListener(OnExitClick);
         }
         
         private void UnsubscribeEvents()
@@ -35,6 +40,7 @@ namespace DoubleTactics.UI.Hud
             EventBus.Unsubscribe(EventTypes.BoardPopulated, OnBoardPopulated);
             EventBus.Unsubscribe(EventTypes.ChangeScore, OnChangeScore);
             EventBus.Unsubscribe(EventTypes.BoardFinished, OnBoardFinished);
+            _exitGameButton.onClick.AddListener(OnExitClick);
         }
 
         private void UpdateScore(int newScore)
@@ -62,6 +68,11 @@ namespace DoubleTactics.UI.Hud
         private void OnBoardFinished(IEventData eventData)
         {
             _hudContainer.SetActive(false);
+        }
+        
+        private void OnExitClick()
+        {
+            EventBus.Invoke(EventTypes.ExitGame);
         }
     }
 }

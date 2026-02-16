@@ -33,10 +33,18 @@ namespace DoubleTactics.Game.Cards
             _spriteRenderer.sprite = _backSprite;
         }
 
-        public void Show()
+        public void Show(bool hasAnimation = true)
         {
             IsShown = true;
-            _animation.Play(ROTATE_TO_FRONT_ANIMATION_NAME);
+
+            if (hasAnimation)
+            {
+                _animation.Play(ROTATE_TO_FRONT_ANIMATION_NAME);
+            }
+            else
+            {
+                _spriteRenderer.sprite = _frontSprite;
+            }
         }
         
         public void Hide()

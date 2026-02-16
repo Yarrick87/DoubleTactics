@@ -55,6 +55,7 @@ namespace DoubleTactics.Game
             EventBus.Subscribe(EventTypes.InputClick, OnInputClick);
             EventBus.Subscribe(EventTypes.BoardFinished, OnBoardFinished);
             EventBus.Subscribe(EventTypes.BoardPopulated, OnBoardPopulated);
+            EventBus.Subscribe(EventTypes.ExitGame, OnExitGame);
         }
         
         private void UnsubscribeEvents()
@@ -64,6 +65,7 @@ namespace DoubleTactics.Game
             EventBus.Unsubscribe(EventTypes.InputClick, OnInputClick);
             EventBus.Unsubscribe(EventTypes.BoardFinished, OnBoardFinished);
             EventBus.Unsubscribe(EventTypes.BoardPopulated, OnBoardPopulated);
+            EventBus.Unsubscribe(EventTypes.ExitGame, OnExitGame);
         }
 
         private void UpdateBoardState(Card card)
@@ -221,6 +223,11 @@ namespace DoubleTactics.Game
                     _shownCardsAmount++;
                 }
             }
+        }
+
+        private void OnExitGame(IEventData eventData)
+        {
+            Application.Quit();
         }
     }
 }

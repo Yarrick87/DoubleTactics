@@ -16,6 +16,9 @@ namespace DoubleTactics.UI.Popups
         private Button _startGameButton;
         
         [SerializeField]
+        private Button _exitGameButton;
+        
+        [SerializeField]
         private Button _loadGameButton;
 
         [SerializeField]
@@ -51,6 +54,7 @@ namespace DoubleTactics.UI.Popups
         {
             _startGameButton.onClick.AddListener(OnStartClick);
             _loadGameButton.onClick.AddListener(OnLoadGameClick);
+            _exitGameButton.onClick.AddListener(OnExitClick);
             _inputField.onValueChanged.AddListener(OnInputFieldValueChanged);
         }
         
@@ -58,6 +62,7 @@ namespace DoubleTactics.UI.Popups
         {
             _startGameButton.onClick.RemoveListener(OnStartClick);
             _loadGameButton.onClick.RemoveListener(OnLoadGameClick);
+            _exitGameButton.onClick.RemoveListener(OnExitClick);
             _inputField.onValueChanged.RemoveListener(OnInputFieldValueChanged);
         }
 
@@ -104,6 +109,11 @@ namespace DoubleTactics.UI.Popups
         {
             ProgressManager.Instance.LoadProgress();
             DestroyImmediate(this.gameObject);
+        }
+
+        private void OnExitClick()
+        {
+            EventBus.Invoke(EventTypes.ExitGame);
         }
     }
 }
