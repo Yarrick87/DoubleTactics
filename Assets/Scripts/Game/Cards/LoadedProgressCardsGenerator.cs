@@ -31,7 +31,7 @@ namespace DoubleTactics.Game.Cards
 
                 if (_cardsData[i].IsShown)
                 {
-                    cards[i].Show();
+                    cards[i].Show(false);
                 }
             }
         }
